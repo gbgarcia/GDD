@@ -13,7 +13,7 @@ ALTURA_PISO     = 600
 
 class Main:
 
-    def _init__(self):
+    def __init__(self):
         pygame.init()
         fpsClock=pygame.time.Clock()
     
@@ -29,10 +29,13 @@ class Main:
         power_ups  = pygame.sprite.Group()
         
         # crear dos personajes, para probar
+        
+        ########################################################
+        personajes.add(pygame.sprite.Sprite())
+        
+        
         personajes.add(Personaje(0,200))
         personajes.add(Personaje(1,400))
-        
-        
         
         # loop principal
         while True:

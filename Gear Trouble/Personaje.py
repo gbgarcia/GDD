@@ -1,8 +1,6 @@
 import pygame
 import os
 
-import Main
-
 # const
 IMGS_ANIMACION  = 4 ############### cambiar
 
@@ -12,14 +10,15 @@ PARADO      = 2
 
 class Personaje(pygame.sprite.Sprite):
     
-    def _init__(self, num, x):
+    def _init__(self, num, x, ALTURA_PISO):
         """ Construye un personaje
         num: 0 o 1 (primer o segundo player)
         x: coordenada x inicial
         """
+        self.ALTURA_PISO=ALTURA_PISO;
         pygame.sprite.Sprite.__init__(self)
         
-        self.standSurface=pygame.image.load("imagenes/stand.png").convert()
+        """self.standSurface=pygame.image.load("imagenes/stand.png").convert()
         self.standSurface_rect=self.standSurface.get_rect()
         
         # movingSurfaces: [izq/der][n de animacion]
@@ -34,9 +33,9 @@ class Personaje(pygame.sprite.Sprite):
 
         self.num=num
         self.x=x
-        self.y=Main.ALTURA_PISO
+        self.y=ALTURA_PISO
         self.movimiento=PARADO
-        self.contador_mov=-1
+        self.contador_mov=-1"""
         
     def update(self,accion):
         

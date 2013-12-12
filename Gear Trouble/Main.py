@@ -1,44 +1,48 @@
-import sys
+#import sys
 import pygame
 from pygame.locals import *
-from random import randint
+#from random import randint
 
 from Personaje import *
-
+"""
 # constantes
 SCREEN_WIDTH    = 1024
 SCREEN_HEIGHT   = 768
 FULLSCREEN      = False
 ALTURA_PISO     = 600
-
+"""
 class Main:
 
     def __init__(self):
         pygame.init()
-        fpsClock=pygame.time.Clock()
+        """fpsClock=pygame.time.Clock()
     
         global windowSurface
         fullscreen_flag=0
         if FULLSCREEN:
             fullscreen_flag=pygame.FULLSCREEN;
         windowSurface=pygame.display.set_mode([SCREEN_WIDTH,SCREEN_HEIGHT],fullscreen_flag)
-        
+        """
         personajes = pygame.sprite.Group()
-        engranajes = pygame.sprite.Group()
+        """engranajes = pygame.sprite.Group()
         balas      = pygame.sprite.Group()
-        power_ups  = pygame.sprite.Group()
+        power_ups  = pygame.sprite.Group()"""
         
         # crear dos personajes, para probar
         
         ########################################################
-        personajes.add(pygame.sprite.Sprite())
+        personajes.add(pygame.sprite.Sprite())  #SI
         
-        
-        personajes.add(Personaje(0,200))
+        personajes.add(Personaje())  #SI
+        asdf=Personaje()  #SI
+        personajes.add(asdf)  #SI
+        qwerty=Personaje(0,0,0)  ###############NO
+        personajes.add(qwerty)
+        personajes.add(Personaje(0,200,0))
         personajes.add(Personaje(1,400))
         
         # loop principal
-        while True:
+        """while True:
             for event in pygame.event.get():
                 if event.type==QUIT:
                     pygame.quit()
@@ -59,5 +63,5 @@ class Main:
             
             pygame.display.update()
             fpsClock.tick(60)
-            
+            """
 Main()

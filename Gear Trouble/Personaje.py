@@ -1,12 +1,12 @@
 import pygame
-import os
+"""import os
 
 # const
 IMGS_ANIMACION  = 4 ############### cambiar
 
 IZQUIERDA   = 0
 DERECHA     = 1
-PARADO      = 2
+PARADO      = 2"""
 
 class Personaje(pygame.sprite.Sprite):
     
@@ -15,8 +15,9 @@ class Personaje(pygame.sprite.Sprite):
         num: 0 o 1 (primer o segundo player)
         x: coordenada x inicial
         """
-        self.ALTURA_PISO=ALTURA_PISO;
+        #self.ALTURA_PISO=ALTURA_PISO;
         pygame.sprite.Sprite.__init__(self)
+        pass
         
         """self.standSurface=pygame.image.load("imagenes/stand.png").convert()
         self.standSurface_rect=self.standSurface.get_rect()
@@ -35,7 +36,7 @@ class Personaje(pygame.sprite.Sprite):
         self.x=x
         self.y=ALTURA_PISO
         self.movimiento=PARADO
-        self.contador_mov=-1"""
+        self.contador_mov=-1
         
     def update(self,accion):
         
@@ -46,7 +47,7 @@ class Personaje(pygame.sprite.Sprite):
             self.rect  = self.standSurface_rect
         else:
             self.image = self.movingSurfaces[self.movimiento][self.contador_mov]
-            self.rect  = self.movingSurfaces_rect[self.movimiento][self.contador_mov]
+            self.rect  = self.movingSurfaces_rect[self.movimiento][self.contador_mov]"""
             
         
             

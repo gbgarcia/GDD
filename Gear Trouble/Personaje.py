@@ -1,53 +1,58 @@
+# -*- coding: utf-8 -*-
+# (si no, no puedo escribir ñ)
+
 import pygame
-"""import os
+import os
 
-# const
-IMGS_ANIMACION  = 4 ############### cambiar
-
-IZQUIERDA   = 0
-DERECHA     = 1
-PARADO      = 2"""
+from Constantes import *
 
 class Personaje(pygame.sprite.Sprite):
     
-    def _init__(self, num, x, ALTURA_PISO):
+    ##### por simplicidad, asumo que todas las imagenes de personaje son del mismo tamaño
+
+    def __init__(self, num, x):
         """ Construye un personaje
         num: 0 o 1 (primer o segundo player)
         x: coordenada x inicial
         """
-        #self.ALTURA_PISO=ALTURA_PISO;
         pygame.sprite.Sprite.__init__(self)
-        pass
         
-        """self.standSurface=pygame.image.load("imagenes/stand.png").convert()
-        self.standSurface_rect=self.standSurface.get_rect()
-        
+        self.standSurface=pygame.image.load("imagenes/p"+str(num)+"_stand.png").convert_alpha()
+
         # movingSurfaces: [izq/der][n de animacion]
-        self.movingSurfaces=[[None for i in range(IMGS_ANIMACION)] for i in range(2)]
-        self.movingSurfaces_rect=[[None for i in range(IMGS_ANIMACION)] for i in range(2)]
+        self.movingSurfaces=[[None for __i in range(IMGS_ANIMACION)] for __i in range(2)]
         for i in range(IMGS_ANIMACION):
-            self.movingSurfaces[0][i]=pygame.image.load("imagenes/move"+str(i)+".png").convert()
+            self.movingSurfaces[0][i]=pygame.image.load("imagenes/p"+str(num)+"_left" +str(i)+".png").convert_alpha()
+            #self.movingSurfaces[1][i]=pygame.image.load("imagenes/p"+str(num)+"_right"+str(i)+".png").convert_alpha()
+            # o para que la derecha sea la izquierda espejada:
             self.movingSurfaces[1][i]=pygame.transform.flip( self.movingSurfaces[0][i], True, False )
-            
-            self.movingSurfaces_rect[0][i]=self.movingSurfaces[0][i].get_rect()
-            self.movingSurfaces_rect[1][i]=self.movingSurfaces[1][i].get_rect()
+            ####### cuando esten las imagenes: comentar la linea de arriba, descomentar la 3 mas arriba, borrar esta linea
 
+        
+        self.rect=self.standSurface.get_rect()
         self.num=num
-        self.x=x
-        self.y=ALTURA_PISO
+        self.rect.centerx=x
+        self.rect.bottom=ALTURA_PISO
         self.movimiento=PARADO
-        self.contador_mov=-1
+        self.contador_mov=0
         
-    def update(self,accion):
+    def update(self, moverseHacia):
         
-        #if accion==
-
+        if moverseHacia[self.num]==PARADO:
+            self.movimiento=PARADO
+        elif moverseHacia[self.num]!=-1:  
+            #TODO: colisiones y topes
+            self.movimiento=moverseHacia[self.num]
+        
         if self.movimiento==PARADO:
-            self.image = self.standSurface
-            self.rect  = self.standSurface_rect
+            self.image=self.standSurface
+            self.contador_mov=0
         else:
-            self.image = self.movingSurfaces[self.movimiento][self.contador_mov]
-            self.rect  = self.movingSurfaces_rect[self.movimiento][self.contador_mov]"""
-            
-        
+            self.image=self.movingSurfaces[self.movimiento][ int(self.contador_mov/FRAMES_POR_IMAGEN) ]
+            self.contador_mov = (self.contador_mov+1) % (IMGS_ANIMACION*FRAMES_POR_IMAGEN)  # 0,0,1,1,2,2,3,3,0,0,1, ...
+            inc_x=VELOC_MOV_PERSONAJES
+            if self.movimiento==IZQUIERDA:
+                inc_x*=-1
+            self.rect.centerx+=inc_x
+
             

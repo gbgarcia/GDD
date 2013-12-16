@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# (si no, no puedo escribir ñ)
+# (si no, no puedo escribir �)
 
 import sys
 import pygame
@@ -25,15 +25,15 @@ def main():
     
     personajes = pygame.sprite.Group()
     engranajes = pygame.sprite.Group()
-    balas      = pygame.sprite.Group()
-    power_ups  = pygame.sprite.Group()
+    balas = pygame.sprite.Group()
+    power_ups = pygame.sprite.Group()
     # creo que tambien se podria tener un solo grupo con capas, pygame.sprite.LayeredUpdates, pero filo
     
     # aqui hay que ver que pasa si hay 1 o 2 jugadores
     personajes.add(Personaje(0,200))
-    #personajes.add(Personaje(1,400))    no tengo imagenes de player2 por mientras
+    #personajes.add(Personaje(1,400)) no tengo imagenes de player2 por mientras
     
-    engranajes.add(Engranaje(300,300, 6, DERECHA, 0))
+    engranajes.add(Engranaje(300,300, 6, DERECHA, 0, BAJA))
     
     # un fondo
     backgroundSurface=pygame.image.load("imagenes/fondo1.png").convert()
@@ -42,7 +42,7 @@ def main():
     # paredes que limitan el movimiento en horizontal
     # _paredes bloquea personajes y engranajes, _paredesEngranajes solo a engranajes
     # deben ir en vertical de 0 a SCREEN_HEIGHT
-    Globals._paredes=[Rect(0,0,10,SCREEN_HEIGHT), Rect(SCREEN_WIDTH-10,0,10,SCREEN_HEIGHT)]   # paredes de los lados con un ancho de 10
+    Globals._paredes=[Rect(0,0,10,SCREEN_HEIGHT), Rect(SCREEN_WIDTH-10,0,10,SCREEN_HEIGHT)] # paredes de los lados con un ancho de 10
     Globals._paredesEngranajes=[]
     # ... agregar otros muros y puertas de cada nivel
     
@@ -52,8 +52,8 @@ def main():
 
         # --- TECLAS
         for event in pygame.event.get():
-            if (    event.type==QUIT or
-                    (event.type == KEYDOWN and event.key == K_F4 and bool(event.mod & KMOD_ALT))):  # alt-f4 no me funciona sin esto
+            if ( event.type==QUIT or
+                    (event.type == KEYDOWN and event.key == K_F4 and bool(event.mod & KMOD_ALT))): # alt-f4 no me funciona sin esto
                 pygame.quit()
                 sys.exit(0)
                 
@@ -69,7 +69,7 @@ def main():
                     movimientoPersonajes[1]=DERECHA
                     
                 elif event.key==K_F12:
-                    pass    # poner un breakpoint aqui -> F12 es debug
+                    pass # poner un breakpoint aqui -> F12 es debug
                         
             elif event.type==KEYUP:
                 if event.key==K_LEFT or event.key==K_RIGHT:
@@ -87,13 +87,13 @@ def main():
         # --- LIMPIAR
         personajes.clear(screenSurface, backgroundSurface)
         engranajes.clear(screenSurface, backgroundSurface)
-        balas     .clear(screenSurface, backgroundSurface)
+        balas .clear(screenSurface, backgroundSurface)
         power_ups .clear(screenSurface, backgroundSurface)
         
         # --- DIBUJAR
         # orden: (atras para adelante)
         # balas, personajes, power_ups, engranajes
-        balas     .draw(screenSurface)
+        balas .draw(screenSurface)
         personajes.draw(screenSurface)
         power_ups .draw(screenSurface)
         engranajes.draw(screenSurface)
@@ -104,7 +104,7 @@ def main():
         
 def cargarSurfacesEngranajes():
     N_COLORES=4
-    #TAMAÑO_MAX=6
+    #TAMA�O_MAX=6
     MAX_SIZE=25
     
     Globals.SURFACE_ENGRANAJES=[[None for __i in range(MAX_SIZE+1)] for __i in range(N_COLORES)]

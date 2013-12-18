@@ -33,6 +33,7 @@ class Personaje(pygame.sprite.Sprite):
         self.rect=self.standSurface.get_rect()
         self.num=num
         self.x=x
+        self.rect.centerx=x    # se pasa a int
         self.rect.bottom=ALTURA_PISO
         self.movimiento=PARADO
         self.contador_mov=0
@@ -52,11 +53,12 @@ class Personaje(pygame.sprite.Sprite):
             self.contador_mov = (self.contador_mov+1) % (IMGS_ANIMACION*FRAMES_POR_IMAGEN)  # 0,0,1,1,2,2,3,3,0,0,1, ...
             
             self.x += VELOC_MOV_PERSONAJES * self.movimiento
+            self.rect.centerx=self.x    # se pasa a int
+            
             while self.estoyDentroDeUnaPared():
                 self.x-=self.movimiento
+                self.rect.centerx=self.x    # se pasa a int
                 # solo correrlo, se ve mejor sin parar la animacion
-                
-        self.rect.centerx=self.x    # se pasa a int
             
     def estoyDentroDeUnaPared(self):
         return self.rect.collidelist(Globals._paredes)!=-1

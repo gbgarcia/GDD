@@ -13,9 +13,9 @@ class Personaje(pygame.sprite.Sprite):
 
     def __init__(self, num, x):
         """ Construye un personaje
-        num: 0 o 1 (primer o segundo player)
-        x: coordenada x inicial
-        """
+num: 0 o 1 (primer o segundo player)
+x: coordenada x inicial
+"""
         pygame.sprite.Sprite.__init__(self)
         
         self.standSurface=pygame.image.load("imagenes/p"+str(num)+"_stand.png").convert_alpha()
@@ -33,7 +33,7 @@ class Personaje(pygame.sprite.Sprite):
         self.rect=self.standSurface.get_rect()
         self.num=num
         self.x=x
-        self.rect.centerx=x    # se pasa a int
+        self.rect.centerx=x # se pasa a int
         self.rect.bottom=ALTURA_PISO
         self.movimiento=PARADO
         self.contador_mov=0
@@ -42,7 +42,7 @@ class Personaje(pygame.sprite.Sprite):
         
         if moverseHacia[self.num]==PARADO:
             self.movimiento=PARADO
-        elif moverseHacia[self.num]!=None:  
+        elif moverseHacia[self.num]!=None:
             self.movimiento=moverseHacia[self.num]
         
         if self.movimiento==PARADO:
@@ -50,14 +50,14 @@ class Personaje(pygame.sprite.Sprite):
             self.contador_mov=0
         else:
             self.image=self.movingSurfaces[self.movimiento][ int(self.contador_mov/FRAMES_POR_IMAGEN) ]
-            self.contador_mov = (self.contador_mov+1) % (IMGS_ANIMACION*FRAMES_POR_IMAGEN)  # 0,0,1,1,2,2,3,3,0,0,1, ...
+            self.contador_mov = (self.contador_mov+1) % (IMGS_ANIMACION*FRAMES_POR_IMAGEN) # 0,0,1,1,2,2,3,3,0,0,1, ...
             
             self.x += VELOC_MOV_PERSONAJES * self.movimiento
-            self.rect.centerx=self.x    # se pasa a int
+            self.rect.centerx=self.x # se pasa a int
             
             while self.estoyDentroDeUnaPared():
                 self.x-=self.movimiento
-                self.rect.centerx=self.x    # se pasa a int
+                self.rect.centerx=self.x # se pasa a int
                 # solo correrlo, se ve mejor sin parar la animacion
             
     def estoyDentroDeUnaPared(self):

@@ -38,12 +38,12 @@ x: coordenada x inicial
         self.movimiento=PARADO
         self.contador_mov=0
         
-    def update(self, moverseHacia):
+    def update(self, direccionPersonajes):
         
-        if moverseHacia[self.num]==PARADO:
+        if direccionPersonajes[self.num]==PARADO:
             self.movimiento=PARADO
-        elif moverseHacia[self.num]!=None:
-            self.movimiento=moverseHacia[self.num]
+        elif direccionPersonajes[self.num]!=None:
+            self.movimiento=direccionPersonajes[self.num]
         
         if self.movimiento==PARADO:
             self.image=self.standSurface

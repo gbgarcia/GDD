@@ -25,8 +25,8 @@ class Personaje(pygame.sprite.Sprite):
         self.stand = (standSurface, PixelPerfectCollision.get_alpha_hitmask(standSurface))
 
         # moving: [izq/der][n de animacion]
-        self.moving=[[None for __i in range(IMGS_ANIMACION)] for __i in range(2)]
-        for i in range(IMGS_ANIMACION):
+        self.moving=[[None for __i in range(IMGS_ANIMACION_P)] for __i in range(2)]
+        for i in range(IMGS_ANIMACION_P):
             movingSurface=pygame.image.load("imagenes/p"+str(color)+"_left" +str(i)+".png").convert_alpha()
             self.moving[0][i] = (movingSurface, PixelPerfectCollision.get_alpha_hitmask(movingSurface))
             
@@ -63,8 +63,8 @@ class Personaje(pygame.sprite.Sprite):
             mov=0
             if self.movimiento==DERECHA:
                 mov=1
-            (self.image,self.hitmask) = self.moving[mov][ int(self.contador_mov/FRAMES_POR_IMAGEN) ]
-            self.contador_mov = (self.contador_mov+1) % (IMGS_ANIMACION*FRAMES_POR_IMAGEN) # 0,0,1,1,2,2,3,3,0,0,1, ...
+            (self.image,self.hitmask) = self.moving[mov][ int(self.contador_mov/FRAMES_POR_IMAGEN_P) ]
+            self.contador_mov = (self.contador_mov+1) % (IMGS_ANIMACION_P*FRAMES_POR_IMAGEN_P) # 0,0,1,1,2,2,3,3,0,0,1, ...
             
             self.x += VELOC_MOV_PERSONAJES * self.movimiento
             self.rect.centerx=self.x    # se pasa a int

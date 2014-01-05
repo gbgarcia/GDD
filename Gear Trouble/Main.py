@@ -26,7 +26,14 @@ def main():
     pygame.display.set_caption("Gear Trouble")
     
     cargarSurfacesEngranajes()
-    Globals.HITMASK_BALAS_NORMALES  = PixelPerfectCollision.get_full_hitmask(pygame.Rect(0,0,ANCHO_BALA_NORMAL,SCREEN_HEIGHT))
+    
+    Globals.SURFACE_BALAS_NORMALES=[]
+    for player in range(2):
+        Globals.SURFACE_BALAS_NORMALES.append(pygame.Surface((ANCHO_BALA_NORMAL,SCREEN_HEIGHT)))
+        Globals.SURFACE_BALAS_NORMALES[player].fill(COLORES_BALAS[player])
+    Globals.RH_BALAS_NORMALES = (pygame.Rect(0,0,ANCHO_BALA_NORMAL,0),
+                                 PixelPerfectCollision.get_full_hitmask(pygame.Rect(0,0,ANCHO_BALA_NORMAL,SCREEN_HEIGHT)))
+    
     
     personajes = pygame.sprite.Group()
     engranajes = pygame.sprite.Group()
@@ -144,15 +151,15 @@ def main():
         # power_ups
         #power_ups.update()
         
-        # colisiones
-        # bala contra engranaje
+        # colisiones: bala contra engranaje
+        engranajesAgregar=[]
         for bala in balas.sprites():
             for engranaje in engranajes.sprites():
                 if PPCollision(bala,engranaje):
                     if bala.tipo!=BALA_TORRE:
                         bala.sacar()
                     Globals._engranajesSacar.append(engranaje)
-                    engranajes.add(engranaje.sacar(True))
+                    engranajesAgregar.extend(engranaje.sacar(True))
         
         # sacar
         for bala in Globals._balasSacar:
@@ -160,20 +167,20 @@ def main():
             balaActiva[bala.num]=False
         for engranaje in Globals._engranajesSacar:
             engranajes.remove(engranaje)
-            if len(engranajes.sprites())==0:
-                # no quedan engranajes
-                pass
-                
-        # engranaje contra personaje
-        #...
-        
-        
+        if len(engranajes.sprites())==0 and len(engranajesAgregar)==0:
+            # no quedan engranajes
+            #####cambiar
+            print("Ganaste!")
+            pygame.quit()
+            sys.exit(0)
         
         # --- LIMPIAR
         personajes.clear(screenSurface, backgroundSurface)
         engranajes.clear(screenSurface, backgroundSurface)
         balas     .clear(screenSurface, backgroundSurface)
         power_ups .clear(screenSurface, backgroundSurface)
+        
+        engranajes.add(engranajesAgregar)
         
         # --- DIBUJAR
         # orden: (atras para adelante)
@@ -184,6 +191,26 @@ def main():
         engranajes.draw(screenSurface)
         # barra de estado
         # ...
+        
+        # colisiones: engranaje contra personaje (revisar ahora que ya esta dibujado el choque)
+        for personaje in referenciaPersonajes:
+            for engranaje in engranajes.sprites():
+                if PPCollision(personaje,engranaje):
+                    cubreMuerte=pygame.Surface((SCREEN_WIDTH,ALTURA_PISO))
+                    cubreMuerte.set_alpha(ALPHA_CUBRE_MUERTE)
+                    cubreMuerte.fill((127,127,127))
+                    TRANSPARENT=(0,0,0) # (cualquier color)
+                    cubreMuerte.set_colorkey(TRANSPARENT)
+                    pygame.draw.circle(cubreMuerte, TRANSPARENT,
+                                       referenciaPersonajes[personaje.num].rect.center, RADIO_CIRCULO_MUERTE)
+                    screenSurface.blit(cubreMuerte, (0,0))
+                    
+                    #####cambiar
+                    print("Perdiste")
+                    pygame.display.update()
+                    pygame.time.wait(2000)
+                    pygame.quit()
+                    sys.exit(0)
         
         pygame.display.update()
         fpsClock.tick(60)

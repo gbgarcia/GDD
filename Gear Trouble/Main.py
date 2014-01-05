@@ -4,12 +4,15 @@
 import sys
 import pygame
 from pygame.locals import *
-#from random import randint
 
 from Globals import *
 import Globals
+import PixelPerfectCollision
+from PixelPerfectCollision import PPCollision
+
 from Personaje import Personaje
 from Engranaje import Engranaje
+from Bala import Bala
 
 def main():
     pygame.init()
@@ -20,8 +23,10 @@ def main():
     if FULLSCREEN:
         fullscreen_flag=pygame.FULLSCREEN;
     screenSurface=pygame.display.set_mode([SCREEN_WIDTH,SCREEN_HEIGHT],fullscreen_flag)
+    pygame.display.set_caption("Gear Trouble")
     
     cargarSurfacesEngranajes()
+    Globals.HITMASK_BALAS_NORMALES  = PixelPerfectCollision.get_full_hitmask(pygame.Rect(0,0,ANCHO_BALA_NORMAL,SCREEN_HEIGHT))
     
     personajes = pygame.sprite.Group()
     engranajes = pygame.sprite.Group()
@@ -30,8 +35,10 @@ def main():
     # creo que tambien se podria tener un solo grupo con capas, pygame.sprite.LayeredUpdates, pero filo
     
     # aqui hay que ver que pasa si hay 1 o 2 jugadores
-    personajes.add(Personaje(0,200))
-    #personajes.add(Personaje(1,400)) no tengo imagenes de player2 por mientras
+    referenciaPersonajes=[]
+    referenciaPersonajes.append(Personaje(0,200))
+    #referenciaPersonajes.append(Personaje(1,400)) no tengo imagenes de player2 por mientras
+    personajes.add(referenciaPersonajes)
     
     engranajes.add(Engranaje(100,200, 1, PARADO, 0, 0))
     engranajes.add(Engranaje(250,200, 2, PARADO, 0, 0))
@@ -55,6 +62,8 @@ def main():
     #Globals._paredesEngranajes.append(Rect(100,0,60,SCREEN_HEIGHT))
     
     movimientoPersonajes=[[False,False],[False,False]]  # [p1/p2][izq/der]
+    presionaDisparo=[False,False]
+    balaActiva=[False,False]
     
     # loop principal
     while True:
@@ -74,6 +83,10 @@ def main():
                     movimientoPersonajes[1][0]=True
                 elif event.key==K_d:
                     movimientoPersonajes[1][1]=True
+                elif event.key==K_UP or event.key==K_DOWN:
+                    presionaDisparo[0]=True
+                elif event.key==K_w or event.key==K_s:
+                    presionaDisparo[1]=True
                     
                 elif event.key==K_F12:
                     pass # poner un breakpoint aqui -> F12 es debug
@@ -101,10 +114,13 @@ def main():
                     movimientoPersonajes[1][0]=False
                 elif event.key==K_d:
                     movimientoPersonajes[1][1]=False
+                elif event.key==K_UP or event.key==K_DOWN:
+                    presionaDisparo[0]=False
+                elif event.key==K_w or event.key==K_s:
+                    presionaDisparo[1]=False
         
         # --- EJECUTAR
-        # orden: personajes, balas, engranajes, power_ups
-        
+        # personajes
         direccionPersonajes=[PARADO,PARADO]
         for player in range(2):
             if   movimientoPersonajes[player][0] and not movimientoPersonajes[player][1]:
@@ -113,11 +129,45 @@ def main():
                 direccionPersonajes[player]=DERECHA
         personajes.update(direccionPersonajes)
         
-        #balas.update()
+        # balas
+        Globals._balasSacar=[]
+        for player in range(2):
+            if presionaDisparo[player] and not balaActiva[player]:
+                balaActiva[player]=True
+                balas.add(Bala(referenciaPersonajes[player]))
+        balas.update()
         
+        # engranajes
+        Globals._engranajesSacar=[]
         engranajes.update()
         
+        # power_ups
         #power_ups.update()
+        
+        # colisiones
+        # bala contra engranaje
+        for bala in balas.sprites():
+            for engranaje in engranajes.sprites():
+                if PPCollision(bala,engranaje):
+                    if bala.tipo!=BALA_TORRE:
+                        bala.sacar()
+                    Globals._engranajesSacar.append(engranaje)
+                    engranajes.add(engranaje.sacar(True))
+        
+        # sacar
+        for bala in Globals._balasSacar:
+            balas.remove(bala)
+            balaActiva[bala.num]=False
+        for engranaje in Globals._engranajesSacar:
+            engranajes.remove(engranaje)
+            if len(engranajes.sprites())==0:
+                # no quedan engranajes
+                pass
+                
+        # engranaje contra personaje
+        #...
+        
+        
         
         # --- LIMPIAR
         personajes.clear(screenSurface, backgroundSurface)
@@ -132,19 +182,20 @@ def main():
         personajes.draw(screenSurface)
         power_ups .draw(screenSurface)
         engranajes.draw(screenSurface)
-        
+        # barra de estado
+        # ...
         
         pygame.display.update()
         fpsClock.tick(60)
         
 def cargarSurfacesEngranajes():
-    Globals.SURFACE_ENGRANAJES=[[None for __i in range(MAX_SIZE_ENGRANAJES+1)] for __i in range(N_COLORES_ENGRANAJES)]
+    Globals.SURFACE_ENGRANAJES=[[None for __i in range(SIZE_ENGRANAJES+1)] for __i in range(N_COLORES_ENGRANAJES)]
     for color in range(N_COLORES_ENGRANAJES):
         surfaceOriginal=pygame.image.load("imagenes/engranaje"+str(color)+".png").convert_alpha()
         diametro=surfaceOriginal.get_width()
-        Globals.SURFACE_ENGRANAJES[color][MAX_SIZE_ENGRANAJES]=surfaceOriginal
-        for size in range(MAX_SIZE_ENGRANAJES):
-            diametro2=int( pow(size,FACTOR_DIAMETRO_SIZE) * diametro / MAX_SIZE_ENGRANAJES )
-            Globals.SURFACE_ENGRANAJES[color][size]=pygame.transform.smoothscale(surfaceOriginal, (diametro2,diametro2))
+        for size in range(1,MAX_SIZE_ENGRANAJES+1):
+            diametro2=int( pow(size,FACTOR_DIAMETRO_SIZE) * diametro / SIZE_ENGRANAJES )
+            surface=pygame.transform.smoothscale(surfaceOriginal, (diametro2,diametro2))
+            Globals.SURFACE_ENGRANAJES[color][size] = (surface, PixelPerfectCollision.get_alpha_hitmask(surface))
 
 main()

@@ -2,7 +2,6 @@
 # (si no, no puedo escribir ñ)
 
 import pygame
-import os
 
 from Globals import *
 import Globals
@@ -97,9 +96,11 @@ class Engranaje(pygame.sprite.Sprite):
                 return []
             else:
                 despl_x=self.rect.width*DIST_CENTRO_ENGRS_CREADOS
-                nueva_vy=0################## cambiar
+                nueva_vy=0################## TODO: cambiar
                 lista=[]
                 lista.append(Engranaje(self.x-despl_x, self.y, self.size-1, IZQUIERDA, self.color, nueva_vy))
                 lista.append(Engranaje(self.x+despl_x, self.y, self.size-1, DERECHA  , self.color, nueva_vy))
                 return lista
+        # pop!
+        
     

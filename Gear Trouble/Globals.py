@@ -10,7 +10,7 @@ ALTURA_PISO     = SCREEN_HEIGHT-40  # por ejemplo, una barra informativa abajo d
 ALTURA_TECHO    = 10
 
 IMGS_ANIMACION_P        = 4
-FRAMES_POR_IMAGEN_P     = 6
+FRAMES_POR_IMAGEN_P     = 8
 RADIO_CIRCULO_MUERTE    = 60
 ALPHA_CUBRE_MUERTE      = 255*2/3
 
@@ -35,14 +35,16 @@ BALA_GANCHO     = 1
 BALA_FUGAZ      = 2
 BALA_TORRE      = 3
 ANCHO_BALA_NORMAL           = 5
-COLORES_BALAS   = [(255,0,0), (0,0,255)]
-ALTURA_SALIDA_BALA          = 45    # respecto a ALTURA_PISO
+COLORES_BALAS_NORMALES      = [(255,0,0), (0,0,255)]
+COLORES_BALAS_GANCHO        = [(255*2/3,0,0),(0,0,255*2/3)]
+ALTURA_SALIDA_BALA          = 44    # respecto a ALTURA_PISO
 VELOC_SUBIDA_BALA_NORMAL    = 9
 
 
-SURFACE_ENGRANAJES  = None  # [color][tamaño], (image,hitmask)
+SURFACE_ENGRANAJES      = None  # [color][tamaño], (image,hitmask)
 SURFACE_BALAS_NORMALES  = None
-RH_BALAS_NORMALES  = None   # (rect,hitmask)
+SURFACE_BALAS_GANCHO    = None
+RH_BALAS_NORMALES       = None  # (rect,hitmask)
 
 
 

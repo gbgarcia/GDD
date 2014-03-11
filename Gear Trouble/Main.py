@@ -25,20 +25,13 @@ def main():
     screenSurface=pygame.display.set_mode([SCREEN_WIDTH,SCREEN_HEIGHT],fullscreen_flag)
     pygame.display.set_caption("Gear Trouble")
     
-    cargarSurfacesEngranajes()
-    
-    Globals.SURFACE_BALAS_NORMALES=[]
-    for player in range(2):
-        Globals.SURFACE_BALAS_NORMALES.append(pygame.Surface((ANCHO_BALA_NORMAL,SCREEN_HEIGHT)))
-        Globals.SURFACE_BALAS_NORMALES[player].fill(COLORES_BALAS[player])
-    Globals.RH_BALAS_NORMALES = (pygame.Rect(0,0,ANCHO_BALA_NORMAL,0),
-                                 PixelPerfectCollision.get_full_hitmask(pygame.Rect(0,0,ANCHO_BALA_NORMAL,SCREEN_HEIGHT)))
-    
-    
+    cargarSurfaces()
+
     personajes = pygame.sprite.Group()
     engranajes = pygame.sprite.Group()
     balas      = pygame.sprite.Group()
     power_ups  = pygame.sprite.Group()
+    efectos    = pygame.sprite.Group()
     # creo que tambien se podria tener un solo grupo con capas, pygame.sprite.LayeredUpdates, pero filo
     
     # aqui hay que ver que pasa si hay 1 o 2 jugadores
@@ -57,6 +50,9 @@ def main():
     # un fondo
     backgroundSurface=pygame.image.load("imagenes/fondo1.png").convert()
     screenSurface.blit(backgroundSurface, (0,0))
+    
+    # barra de estado
+    statusBarSurface=pygame.image.load("imagenes/statusBar.png").convert()
     
     # paredes que limitan el movimiento en horizontal
     # _paredes bloquea personajes y engranajes, _paredesEngranajes solo a engranajes
@@ -151,6 +147,9 @@ def main():
         # power_ups
         #power_ups.update()
         
+        # efectos
+        #efectos.update()
+        
         # colisiones: bala contra engranaje
         engranajesAgregar=[]
         for bala in balas.sprites():
@@ -179,23 +178,30 @@ def main():
         engranajes.clear(screenSurface, backgroundSurface)
         balas     .clear(screenSurface, backgroundSurface)
         power_ups .clear(screenSurface, backgroundSurface)
+        efectos   .clear(screenSurface, backgroundSurface)
         
         engranajes.add(engranajesAgregar)
         
         # --- DIBUJAR
         # orden: (atras para adelante)
-        # balas, personajes, power_ups, engranajes
+        # balas, personajes, power_ups, engranajes, efectos
         balas     .draw(screenSurface)
         personajes.draw(screenSurface)
         power_ups .draw(screenSurface)
         engranajes.draw(screenSurface)
+        efectos   .draw(screenSurface)
         # barra de estado
-        # ...
+        screenSurface.blit(statusBarSurface, (0,ALTURA_PISO))
         
         # colisiones: engranaje contra personaje (revisar ahora que ya esta dibujado el choque)
         for personaje in referenciaPersonajes:
             for engranaje in engranajes.sprites():
                 if PPCollision(personaje,engranaje):
+                    """ TODO: que el cubreMuerte sea una imagen,
+                        de ancho SCREEN_WIDTH*2, alto ALTURA_PISO,
+                        con un circulo transparente centrado en x, a la altura correcta en y
+                        y que tenga distintos niveles de alphas, para que se vea con anti-alias
+                        (falta que ALTURA_PISO sea definitiva) """
                     cubreMuerte=pygame.Surface((SCREEN_WIDTH,ALTURA_PISO))
                     cubreMuerte.set_alpha(ALPHA_CUBRE_MUERTE)
                     cubreMuerte.fill((127,127,127))
@@ -215,7 +221,8 @@ def main():
         pygame.display.update()
         fpsClock.tick(60)
         
-def cargarSurfacesEngranajes():
+def cargarSurfaces():
+    # engranajes
     Globals.SURFACE_ENGRANAJES=[[None for __i in range(SIZE_ENGRANAJES+1)] for __i in range(N_COLORES_ENGRANAJES)]
     for color in range(N_COLORES_ENGRANAJES):
         surfaceOriginal=pygame.image.load("imagenes/engranaje"+str(color)+".png").convert_alpha()
@@ -224,5 +231,16 @@ def cargarSurfacesEngranajes():
             diametro2=int( pow(size,FACTOR_DIAMETRO_SIZE) * diametro / SIZE_ENGRANAJES )
             surface=pygame.transform.smoothscale(surfaceOriginal, (diametro2,diametro2))
             Globals.SURFACE_ENGRANAJES[color][size] = (surface, PixelPerfectCollision.get_alpha_hitmask(surface))
+    
+    # balas normales
+    Globals.SURFACE_BALAS_NORMALES=[]
+    Globals.SURFACE_BALAS_GANCHO  =[]
+    for player in range(2):
+        Globals.SURFACE_BALAS_NORMALES.append(pygame.Surface((ANCHO_BALA_NORMAL,SCREEN_HEIGHT)))
+        Globals.SURFACE_BALAS_GANCHO  .append(pygame.Surface((ANCHO_BALA_NORMAL,SCREEN_HEIGHT)))
+        Globals.SURFACE_BALAS_NORMALES[player].fill(COLORES_BALAS_NORMALES[player])
+        Globals.SURFACE_BALAS_GANCHO  [player].fill(COLORES_BALAS_GANCHO  [player])
+    Globals.RH_BALAS_NORMALES = (pygame.Rect(0,0,ANCHO_BALA_NORMAL,0),
+                                 PixelPerfectCollision.get_full_hitmask(pygame.Rect(0,0,ANCHO_BALA_NORMAL,SCREEN_HEIGHT)))
 
 main()

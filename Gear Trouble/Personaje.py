@@ -30,10 +30,9 @@ class Personaje(pygame.sprite.Sprite):
             movingSurface=pygame.image.load("imagenes/p"+str(color)+"_left" +str(i)+".png").convert_alpha()
             self.moving[0][i] = (movingSurface, PixelPerfectCollision.get_alpha_hitmask(movingSurface))
             
-            #movingSurface=pygame.image.load("imagenes/p"+str(color)+"_right"+str(i)+".png").convert_alpha()
+            movingSurface=pygame.image.load("imagenes/p"+str(color)+"_right"+str(i)+".png").convert_alpha()
             # o para que la derecha sea la izquierda espejada:
-            movingSurface=pygame.transform.flip(movingSurface, True, False)
-            ####### cuando esten las imagenes: cambiar
+            #movingSurface=pygame.transform.flip(movingSurface, True, False)
             self.moving[1][i] = (movingSurface, PixelPerfectCollision.get_alpha_hitmask(movingSurface))
         
         self.rect=self.stand[0].get_rect()

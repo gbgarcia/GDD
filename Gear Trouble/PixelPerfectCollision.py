@@ -2,8 +2,8 @@
 
 def get_alpha_hitmask(image, alpha=0):
     """returns a hitmask using an image's alpha.
-       image->pygame Surface,
-       alpha->the alpha amount that is invisible in collisions"""
+image->pygame Surface,
+alpha->the alpha amount that is invisible in collisions"""
     rect=image.get_rect()
     mask=[]
     for x in range(rect.width):
@@ -14,7 +14,7 @@ def get_alpha_hitmask(image, alpha=0):
 
 def get_full_hitmask(rect):
     """returns a completely full hitmask that fits the image,
-       without referencing the images colorkey or alpha."""
+without referencing the images colorkey or alpha."""
     mask=[]
     for x in range(rect.width):
         mask.append([])

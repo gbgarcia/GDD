@@ -2,6 +2,7 @@
 # (si no, no puedo escribir ñ)
 
 import pygame
+import os
 
 from Globals import *
 import Globals
@@ -10,12 +11,12 @@ class Engranaje(pygame.sprite.Sprite):
     
     def __init__(self, x,y , size, direccion, color, veloc_y):
         """ Construye un engranaje
-        x,y: centro de la posicion inicial
-        size (no se puede 'tamaño'): cuantos golpes le faltan para romperse
-        direccion: IZQUIERDA/DERECHA/PARADO
-        color: 1,2,3,... para cargar la imagen
-        veloc_y: velocidad en y
-        """
+x,y: centro de la posicion inicial
+size (no se puede 'tamaño'): cuantos golpes le faltan para romperse
+direccion: IZQUIERDA/DERECHA/PARADO
+color: 1,2,3,... para cargar la imagen
+veloc_y: velocidad en y
+"""
         pygame.sprite.Sprite.__init__(self)
         
         self.x=x
@@ -58,7 +59,7 @@ class Engranaje(pygame.sprite.Sprite):
             
         if paredContraLaQueChoco:
             if self.direccion==DERECHA:
-                self.x += (paredContraLaQueChoco.left-self.rect.right) * 2  
+                self.x += (paredContraLaQueChoco.left-self.rect.right) * 2
             else:
                 self.x -= (self.rect.left-paredContraLaQueChoco.right) * 2
             self.rect.centerx=self.x
@@ -76,12 +77,11 @@ class Engranaje(pygame.sprite.Sprite):
             self.rect.centery=self.y
 
         """ lo lamento, esto esta harcode-eado a este tamaño de engranaje, en un nivel sin paredes
-        
-        if self.x - 73.411 <= 0 or self.x + 73.411 >= SCREEN_WIDTH:
-              self.direccion = -self.direccion
+if self.x - 73.411 <= 0 or self.x + 73.411 >= SCREEN_WIDTH:
+self.direccion = -self.direccion
 
-        if self.y + 73.411 >= ALTURA_PISO or self.y - 73.65778 <= 0:
-              self.sube = -self.sube """
+if self.y + 73.411 >= ALTURA_PISO or self.y - 73.65778 <= 0:
+self.sube = -self.sube """
               
         # choque contra el techo
         if self.rect.top <= ALTURA_TECHO:
@@ -96,11 +96,8 @@ class Engranaje(pygame.sprite.Sprite):
                 return []
             else:
                 despl_x=self.rect.width*DIST_CENTRO_ENGRS_CREADOS
-                nueva_vy=0################## TODO: cambiar
+                nueva_vy=0################## cambiar
                 lista=[]
                 lista.append(Engranaje(self.x-despl_x, self.y, self.size-1, IZQUIERDA, self.color, nueva_vy))
-                lista.append(Engranaje(self.x+despl_x, self.y, self.size-1, DERECHA  , self.color, nueva_vy))
+                lista.append(Engranaje(self.x+despl_x, self.y, self.size-1, DERECHA , self.color, nueva_vy))
                 return lista
-        # pop!
-        
-    

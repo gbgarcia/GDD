@@ -14,9 +14,9 @@ class Personaje(pygame.sprite.Sprite):
 
     def __init__(self, color, x):
         """ Construye un personaje
-        color: 0 o 1 (primer o segundo player)
-        x: coordenada x inicial
-        """
+color: 0 o 1 (primer o segundo player)
+x: coordenada x inicial
+"""
         pygame.sprite.Sprite.__init__(self)
         
         # self.stand y self.moving contienen (image,hitmask)
@@ -30,9 +30,10 @@ class Personaje(pygame.sprite.Sprite):
             movingSurface=pygame.image.load("imagenes/p"+str(color)+"_left" +str(i)+".png").convert_alpha()
             self.moving[0][i] = (movingSurface, PixelPerfectCollision.get_alpha_hitmask(movingSurface))
             
-            movingSurface=pygame.image.load("imagenes/p"+str(color)+"_right"+str(i)+".png").convert_alpha()
+            #movingSurface=pygame.image.load("imagenes/p"+str(color)+"_right"+str(i)+".png").convert_alpha()
             # o para que la derecha sea la izquierda espejada:
-            #movingSurface=pygame.transform.flip(movingSurface, True, False)
+            movingSurface=pygame.transform.flip(movingSurface, True, False)
+            ####### cuando esten las imagenes: cambiar
             self.moving[1][i] = (movingSurface, PixelPerfectCollision.get_alpha_hitmask(movingSurface))
         
         self.rect=self.stand[0].get_rect()
@@ -66,11 +67,11 @@ class Personaje(pygame.sprite.Sprite):
             self.contador_mov = (self.contador_mov+1) % (IMGS_ANIMACION_P*FRAMES_POR_IMAGEN_P) # 0,0,1,1,2,2,3,3,0,0,1, ...
             
             self.x += VELOC_MOV_PERSONAJES * self.movimiento
-            self.rect.centerx=self.x    # se pasa a int
+            self.rect.centerx=self.x # se pasa a int
             
             while self.estoyDentroDeUnaPared():
                 self.x-=self.movimiento
-                self.rect.centerx=self.x    # se pasa a int
+                self.rect.centerx=self.x # se pasa a int
                 # solo correrlo, se ve mejor sin parar la animacion
             
     def estoyDentroDeUnaPared(self):

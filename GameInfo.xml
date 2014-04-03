@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<Game>
+	<Title>Gear Trouble</Title>
+	<Code>GT</Code>
+	<Version>0</Version>
+	<Date>30-02-2015</Date>
+	<Description>¡Haz estallar todos los engranajes y mantente a salvo! Revienta los engranajes saltarines partiéndolos en dos una y otra vez, disparando arpones al techo y evitando que te toquen.</Description>
+	<MainClass name="NuestroJuego" file="./games/gt/launcher.py"/>
+	<Authors>
+		<Author name="Tomás Andrighetti"/>
+		<Author name="Gavino García"/>
+		<Author name="Consuelo Moya"/>
+	</Authors>
+	<Screenshots>
+		<Screenshot src="./games/gt/screenshots/1.png"/>
+		<Screenshot src="./games/gt/screenshots/2.png"/>
+		<Screenshot src="./games/gt/screenshots/3.png"/>
+	</Screenshots>
+	<Services>
+		<Service name="HighscoreService" max="10" storage="global"/>
+	<Services>
+</Game>

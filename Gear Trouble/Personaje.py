@@ -14,9 +14,9 @@ class Personaje(pygame.sprite.Sprite):
 
     def __init__(self, color, x):
         """ Construye un personaje
-color: 0 o 1 (primer o segundo player)
-x: coordenada x inicial
-"""
+        color: 0 o 1 (primer o segundo player)
+        x: coordenada x inicial
+        """
         pygame.sprite.Sprite.__init__(self)
         
         # self.stand y self.moving contienen (image,hitmask)
@@ -25,15 +25,14 @@ x: coordenada x inicial
         self.stand = (standSurface, PixelPerfectCollision.get_alpha_hitmask(standSurface))
 
         # moving: [izq/der][n de animacion]
-        self.moving=[[None for __i in range(IMGS_ANIMACION_P)] for __i in range(2)]
-        for i in range(IMGS_ANIMACION_P):
+        self.moving=[[None for __i in range(IMGS_ANIMACION_PERS)] for __i in range(2)]
+        for i in range(IMGS_ANIMACION_PERS):
             movingSurface=pygame.image.load("imagenes/p"+str(color)+"_left" +str(i)+".png").convert_alpha()
             self.moving[0][i] = (movingSurface, PixelPerfectCollision.get_alpha_hitmask(movingSurface))
             
-            #movingSurface=pygame.image.load("imagenes/p"+str(color)+"_right"+str(i)+".png").convert_alpha()
+            movingSurface=pygame.image.load("imagenes/p"+str(color)+"_right"+str(i)+".png").convert_alpha()
             # o para que la derecha sea la izquierda espejada:
-            movingSurface=pygame.transform.flip(movingSurface, True, False)
-            ####### cuando esten las imagenes: cambiar
+            #movingSurface=pygame.transform.flip(movingSurface, True, False)
             self.moving[1][i] = (movingSurface, PixelPerfectCollision.get_alpha_hitmask(movingSurface))
         
         self.rect=self.stand[0].get_rect()
@@ -43,7 +42,7 @@ x: coordenada x inicial
         self.num=color
         
         self.x=x
-        self.rect.centerx=x # se pasa a int
+        self.rect.centerx=x     # se pasa a int
         self.rect.bottom=ALTURA_PISO
         self.movimiento=PARADO
         self.contador_mov=0
@@ -63,15 +62,15 @@ x: coordenada x inicial
             mov=0
             if self.movimiento==DERECHA:
                 mov=1
-            (self.image,self.hitmask) = self.moving[mov][ int(self.contador_mov/FRAMES_POR_IMAGEN_P) ]
-            self.contador_mov = (self.contador_mov+1) % (IMGS_ANIMACION_P*FRAMES_POR_IMAGEN_P) # 0,0,1,1,2,2,3,3,0,0,1, ...
+            (self.image,self.hitmask) = self.moving[mov][ int(self.contador_mov/FRAMES_POR_IMAGEN_PERS) ]
+            self.contador_mov = (self.contador_mov+1) % (IMGS_ANIMACION_PERS*FRAMES_POR_IMAGEN_PERS) # 0,0,1,1,2,2,3,3,0,0,1, ...
             
             self.x += VELOC_MOV_PERSONAJES * self.movimiento
-            self.rect.centerx=self.x # se pasa a int
+            self.rect.centerx=self.x    # se pasa a int
             
             while self.estoyDentroDeUnaPared():
                 self.x-=self.movimiento
-                self.rect.centerx=self.x # se pasa a int
+                self.rect.centerx=self.x    # se pasa a int
                 # solo correrlo, se ve mejor sin parar la animacion
             
     def estoyDentroDeUnaPared(self):

@@ -5,7 +5,7 @@
 	<Version>0</Version>
 	<Date>27-05-2014</Date>
 	<Description>¡Haz estallar todos los engranajes y mantente a salvo! Revienta los engranajes saltarines partiéndolos en dos una y otra vez, disparando arpones al techo y evitando que te toquen.</Description>
-	<MainClass name="NuestroJuego" file="./games/gt/launcher.py"/>
+	<MainClass name="NuestroJuego" file="./games/gt/main.py"/>
 	<Authors>
 		<Author name="Tomás Andrighetti"/>
 		<Author name="Gavino García"/>

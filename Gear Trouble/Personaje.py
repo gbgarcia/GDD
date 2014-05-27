@@ -9,9 +9,6 @@ import Globals
 import PixelPerfectCollision
 
 class Personaje(pygame.sprite.Sprite):
-    
-    ##### por simplicidad, asumo que todas las imagenes de personaje son del mismo tamaño
-
     def __init__(self, color, x):
         """ Construye un personaje
         color: 0 o 1 (primer o segundo player)
@@ -20,7 +17,6 @@ class Personaje(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         # self.stand y self.moving contienen (image,hitmask)
-        
         standSurface=pygame.image.load("imagenes/p"+str(color)+"_stand.png").convert_alpha()
         self.stand = (standSurface, PixelPerfectCollision.get_alpha_hitmask(standSurface))
 

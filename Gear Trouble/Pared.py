@@ -39,10 +39,10 @@ class Pared(pygame.sprite.Sprite):
         self.vy=0
         if tipo==PARED_PUERTA:
             self.rect.top=ALTURA_PUERTA
-            self.ay=VELOC_SUBIDA_PUERTA
+            self.ay=ACEL_SUBIDA_PUERTA
             self.tope=ALTURA_PUERTA
         else:
-            self.ay=VELOC_SUBIDA_PARED
+            self.ay=ACEL_SUBIDA_PARED
             self.tope=0
                     
     def update(self, paredesSacar, idLevantar):

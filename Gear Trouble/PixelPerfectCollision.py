@@ -33,10 +33,13 @@ def PPCollision(obj1,obj2):
     if rect.width==0 or rect.height==0:
         return False
     
-    x1=rect.x-rect1.x
-    y1=rect.y-rect1.y
-    x2=rect.x-rect2.x
-    y2=rect.y-rect2.y
+    # bug: (a veces) IndexError: list index out of range
+    #print(str(rect)+" , "+str(rect1)+" , "+str(rect2))
+    
+    x1=rect.x-rect1.x   # 128-111
+    y1=rect.y-rect1.y   # 438-438
+    x2=rect.x-rect2.x   # 128-128
+    y2=rect.y-rect2.y   # 438-416    por ej.
     
     for x in xrange(rect.width):
         for y in xrange(rect.height):

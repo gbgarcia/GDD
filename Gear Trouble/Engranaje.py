@@ -51,7 +51,6 @@ class Engranaje(pygame.sprite.Sprite):
         return cls(arr[0],arr[1],arr[2],arr[3],arr[4],arr[5],arr[6])
         
     def update(self):
-        
         # movimiento horizontal
         self.x += VELOC_X_ENGRANAJES * self.direccion
         self.rect.centerx=self.x
@@ -88,12 +87,14 @@ class Engranaje(pygame.sprite.Sprite):
               
         # choque contra el techo
         if self.rect.top <= ALTURA_TECHO:
-            self.sacar(False)
+            self.sacar(False, self.ownerCombo, -1)
             Globals._efectosAgregar.append(Efecto(self.x, Y_COMBO, Globals.SURFACE_COMBO, 1))
+            Globals._sonidos["combo"].play()
         
-    def sacar(self,crearOtros):
+    def sacar(self, crearOtros, playerKill, shotBalaFugaz):
         Globals._engranajesSacar.append(self)
         Globals._idsEngranajes[self.id]-=1
+        Globals._puntuacion[playerKill]+=PUNTAJE_ROMPER[self.size]
         
         if crearOtros:
             lista=[]
@@ -101,12 +102,18 @@ class Engranaje(pygame.sprite.Sprite):
                 despl_x=self.rect.width*DIST_CENTRO_ENGRS_CREADOS
                 
                 # no tiene sentido pasar estos numeros a constantes
-                p1 = 0.9 - self.size/9.0                # plot(0.9-size/9,size=1..6,y=0..1);
-                p2 = 1/( (1+pow(self.vy,2))/4 + 1.25)   # plot(1/((1+vy^2)/4+1.25),vy=-3..3,y=0..1);
-                nueva_vy = -10.25*p1*p2                 # plot3d(10.25*(0.9-size/9)*1/((1+vy^2)/4+1.25),size=1..6,vy=-3..3,axes=normal,shading=zhue);
-                #print "%0.4f , %0.4f -> %0.4f" % (p1,p2,nueva_vy)
+                # p1 dice cuanto mas alto salta un engranaje por ser mas chico
+                # p2 dice cuanto mas alto salta por estar mas quieto
+                if shotBalaFugaz:
+                    pass    # TODO
+                EMPUJE = 10.5
+                p1 = 0.95 - self.size/8.0               # plot(0.95-size/8,size=2..6,y=0..1);
+                p2 = 1/( (1 + self.vy**2)/4 + 1.25)     # plot(1/((1+vy^2)/4+1.25),vy=-3..3,y=0..1);
+                nueva_vy = -EMPUJE*p1*p2                # plot3d(10.5*(0.95-size/8)*1/((1+vy^2)/4+1.25),size=2..6,vy=-3..3,axes=normal,shading=zhue);
                 
                 lista.append(Engranaje(self.x-despl_x, self.y, self.size-1, IZQUIERDA, self.color, nueva_vy, self.id))
                 lista.append(Engranaje(self.x+despl_x, self.y, self.size-1, DERECHA  , self.color, nueva_vy, self.id))
+                lista[0].ownerCombo=playerKill
+                lista[1].ownerCombo=playerKill
             return lista
         
